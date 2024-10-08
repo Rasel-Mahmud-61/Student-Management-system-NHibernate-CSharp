@@ -1,0 +1,11 @@
+﻿<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" assembly="StudentManagementApp" namespace="StudentManagementApp.Model">
+	<class name="Student" table="StudentDetails">
+		<id name="rollNumber" column="rollNumber">
+			<generator class="assigned"/>
+		</id>
+		<property name="firstName" column="firstName" />
+		<property name="lastName" column="lastName" />
+		<property name="department" column="department" />
+		<property name="mobileNumber" column="mobileNumber" />
+	</class>
+</hibernate-mapping>
