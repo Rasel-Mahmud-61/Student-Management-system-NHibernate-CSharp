@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
 using NHibernate.Driver;
+using StudentManagementApp.BusinessLogic;
 using StudentManagementApp.Model;
 
 
@@ -67,37 +68,26 @@ namespace StudentManagementApp.View
             string inputRollNumber = Console.ReadLine();
             int rollNumberToSearch = int.Parse(inputRollNumber);
 
-            string connStr = "Data Source=LAPTOP-SP1NASH4\\SQLEXPRESS,1433;Initial Catalog=RASELMAHMUD;TrustServerCertificate=True; Trusted_Connection=True;";
-
-            var config = new Configuration();
-            config.DataBaseIntegration(d =>
-            {
-                d.ConnectionString = connStr;
-                d.Dialect<MsSql2012Dialect>();
-                d.Driver<NHibernate.Driver.MicrosoftDataSqlClientDriver>();
-            });
-
-            config.AddAssembly(Assembly.GetExecutingAssembly());
-            var sessionFactory = config.BuildSessionFactory();
-
-            using (var session = sessionFactory.OpenSession())
+       
+           
+            using (var session = NHibernateHelper.GetSession())
             {
                 try
                 {
                     using (var transaction = session.BeginTransaction())
                     {
                         // Fetch student data by roll number
-                        var student = session.Query<Student>().FirstOrDefault(s => s.rollNumber == rollNumberToSearch);
+                        var student = session.Query<Student>().FirstOrDefault(s => s.RollNumber == rollNumberToSearch);
 
                         // Check if student exists and display data
                         if (student != null)
                         {
                             Console.WriteLine("Student Details:");
-                            Console.WriteLine("Roll Number: " + student.rollNumber);
-                            Console.WriteLine("First Name: " + student.firstName);
-                            Console.WriteLine("Last Name: " + student.lastName);
-                            Console.WriteLine("Department: " + student.department);
-                            Console.WriteLine("Mobile Number: " + student.mobileNumber);
+                            Console.WriteLine("Roll Number: " + student.RollNumber);
+                            Console.WriteLine("First Name: " + student.FirstName);
+                            Console.WriteLine("Last Name: " + student.LastName);
+                            Console.WriteLine("Department: " + student.Department);
+                            Console.WriteLine("Mobile Number: " + student.MobileNumber);
                         }
                         else
                         {
@@ -117,26 +107,14 @@ namespace StudentManagementApp.View
 
         public void PushTheValueToDatabase()
         {
-            string connStr = "Data Source=LAPTOP-SP1NASH4\\SQLEXPRESS,1433;Initial Catalog=RASELMAHMUD;TrustServerCertificate=True; Trusted_Connection=True;";
+      
 
-            var config = new Configuration();
-            config.DataBaseIntegration(d =>
+
+  
+
+            using (var session = NHibernateHelper.GetSession())
             {
-                d.ConnectionString = connStr;
-                d.Dialect<MsSql2012Dialect>();
-                d.Driver<NHibernate.Driver.MicrosoftDataSqlClientDriver>();
-
-            });
-
-
-            config.AddAssembly(Assembly.GetExecutingAssembly());
-
-
-            var sessionFactory = config.BuildSessionFactory();
-
-            using (var session = sessionFactory.OpenSession())
-            {
-               try
+                try
                 {
                     using (var transaction = session.BeginTransaction())
                     {
@@ -144,11 +122,11 @@ namespace StudentManagementApp.View
                         {
                             var student = new Student()
                             {
-                                rollNumber = this.rollNumber,
-                                firstName = this.firstName,
-                                lastName = this.lastName,
-                                department = this.department,
-                                mobileNumber = this.mobileNumber,
+                                RollNumber = rollNumber,
+                                FirstName = firstName,
+                                LastName = lastName,
+                                Department = department,
+                                MobileNumber = mobileNumber,
                             };
 
 
@@ -162,12 +140,14 @@ namespace StudentManagementApp.View
                         }
                     }
                 }
-                catch(Exception ex) 
+                catch (Exception ex)
                 {
 
                 }
             }
 
         }
+
+       
     }
 }

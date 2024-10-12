@@ -8,16 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Mapping\StudentDetails.hbm.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Mapping\StudentDetails.hbm.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="FluentNHibernate" Version="3.4.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
-    <PackageReference Include="NHibernate" Version="5.5.2" />
   </ItemGroup>
 
 </Project>
